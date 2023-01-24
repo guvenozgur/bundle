@@ -21,13 +21,15 @@ public class FileWriterProducerImpl implements IDataProducer {
   private static final String DIRECTORY = "data-handler/out/random_data.txt";
   private static final Gson gson = new Gson();
 
+  private static final Integer FILE_WRITE_THRESHOLD = 10;
+
   List<String> dataList = Collections.synchronizedList(new ArrayList<>());
 
   @Override
   public void send(RandomData randomData) {
     String data = gson.toJson(randomData);
     synchronized (dataList) {
-      if(dataList.size() > 100) {
+      if(dataList.size() > FILE_WRITE_THRESHOLD) {
         log.info("Appending to the file: " + dataList.size() );
         appendToFile(dataList);
         dataList.clear();
